@@ -22,7 +22,6 @@ class App extends React.Component {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => { // componentdidmount will only fetch data once. we want to always know if user is signed in our out. hence auth.onAuthStateChanged is a method from firebase that helps to do that. firebase gives persistence of user until signed out
       // this.setState({ currentUser: user });
       // console.log(user) // user object gives us all the impt stuff like name, email
-
     // createUserProfileDocument(user)
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth); // check if DB has updated with new data
@@ -39,10 +38,11 @@ class App extends React.Component {
             },
             // () => console.log(this.state) // cannot call this after setState as it is asynchronous i.e. setState not finished when u call CL, so need to pass 2nd function inside setState
           );
+          // console.log(this.state);
         })
-        console.log(this.state)
       } else {
         this.setState({currentUser: userAuth}) // if user logs out, set it to null
+        // console.log(this.state);
       }
 
     });
