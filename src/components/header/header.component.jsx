@@ -27,4 +27,4 @@ const mapStateToProps = state => ({ // state here is rootreducer
   currentUser: state.user.currentUser
 })
 
-export default connect(mapStateToProps)(Header) 
+export default connect(mapStateToProps)(Header) // get null value as current user passed to header

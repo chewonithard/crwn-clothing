@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
@@ -19,7 +19,7 @@ class App extends React.Component {
       // this.setState({ currentUser: user });
       // console.log(user) // user object gives us all the impt stuff like name, email
     // createUserProfileDocument(user)
-      if (userAuth) {
+      if (userAuth) { // userauth is big user object returned from firebase
         const userRef = await createUserProfileDocument(userAuth); // check if DB has updated with new data
 
         userRef.onSnapshot ( snapshot => {  // onSnapshot similar to calling onAuthStateChanged
@@ -53,15 +53,23 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
-          <Route path="/signin" component={SignInAndSignUpPage} />
+          <Route exact path="/signin" render={() => this.props.currentUser ?
+            (<Redirect to='/' />) :
+            (<SignInAndSignUpPage />)}/>
         </Switch>
       </div>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
 })
 
-export default connect(null, mapDispatchToProps)(App);
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user)) // dispatch is way for redux to know that w/e object u are passing me is an action object that i will pass to every reducer
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App); // null here instead of mapStateToProps because we don't need current user at the app level
+
+// If you want a component to listen/subscribe to state changed in store you use connect
