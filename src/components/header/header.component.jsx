@@ -3,6 +3,7 @@ import './header.styles.scss'
 import { Link } from 'react-router-dom'
 import { ReactComponent as Logo } from '../../assets/crown.svg'
 import { auth } from '../../firebase/firebase.utils'
+import { connect } from 'react-redux' // a higher order component to modify our componets to have access to redux store
 
 const Header = ({ currentUser }) => (
   <div className='header'>
@@ -22,4 +23,8 @@ const Header = ({ currentUser }) => (
   </div>
 )
 
-export default Header
+const mapStateToProps = state => ({ // state here is rootreducer
+  currentUser: state.user.currentUser
+})
+
+export default connect(mapStateToProps)(Header) 
