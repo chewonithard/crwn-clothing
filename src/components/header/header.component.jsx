@@ -6,6 +6,9 @@ import { ReactComponent as Logo } from '../../assets/crown.svg'
 import { auth } from '../../firebase/firebase.utils'
 import { connect } from 'react-redux' // a higher order component to modify our componets to have access to redux store
 import CartDropDown from '../cart-dropdown/cart-dropdown.component'
+import { createStructuredSelector } from 'reselect'
+import { selectCartHidden } from '../../redux/cart/cart.selectors'
+import { selectCurrentUser } from '../../redux/user/user.selector'
 
 const Header = ({ currentUser, hidden }) => (
   <div className='header'>
@@ -30,9 +33,14 @@ const Header = ({ currentUser, hidden }) => (
   </div>
 )
 
-const mapStateToProps = ({user: { currentUser }, cart: { hidden }}) => ({ // state here is rootreducer // destructuring syntax off the props
-  currentUser,
-  hidden
+// const mapStateToProps = (state) => ({ // state here is rootreducer // destructuring syntax off the props
+//   currentUser: selectCurrentUser(state),
+//   hidden: selectCartHidden(state)
+// })
+
+const mapStateToProps= createStructuredSelector ({
+  currentUser: selectCurrentUser,
+  hidden: selectCartHidden
 })
 
 export default connect(mapStateToProps)(Header) // get null value as current user passed to header

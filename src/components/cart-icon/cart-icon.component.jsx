@@ -17,7 +17,13 @@ const mapDispatchToProps = dispatch => ({
   toggleCartHidden: () => dispatch(toggleCartHidden())
 })
 
-const mapStateToProps = state => ({ // state here is rootreducer // destructuring syntax off the props
+// const mapStateToProps = ( {cart: { cartItems }}) => ({ // state here is rootreducer // destructuring syntax off the props
+//   itemCount: cartItems.reduce(
+//     (accumulatedQuantity, cartItem) => accumulatedQuantity + cartItem.quantity, 0
+//   )
+//  })
+
+const mapStateToProps = state => ({ // using selector instead
   itemCount: selectCartItemsCount(state)
  })
 

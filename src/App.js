@@ -3,11 +3,14 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
-import Header from "./components/header/header.component";
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
+import CheckoutPage from "./pages/checkout/checkout.component";
+
+import Header from "./components/header/header.component";
 import { auth, createUserProfileDocument } from './firebase/firebase.utils' // need to import currentuser state here. hence used class componenet
 import { connect } from 'react-redux'
 import { setCurrentUser } from './redux/user/user.actions'
+import { selectCurrentUser } from './redux/user/user.selector'
 
 class App extends React.Component {
   unsubscribeFromAuth = null // onAuthStateChanged is an OPEN subscription between app and firebase. need to close it when user signs out, otherwise there will be memory leaks from our app. null is assigned as default value here.
@@ -52,7 +55,8 @@ class App extends React.Component {
         <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/shop" component={ShopPage} />
+          <Route path="/shop" component={ShopPage} /> 
+          <Route exact path="/checkout" component={CheckoutPage}/>
           <Route exact path="/signin" render={() => this.props.currentUser ?
             (<Redirect to='/' />) :
             (<SignInAndSignUpPage />)}/>
@@ -62,8 +66,8 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
+const mapStateToProps = (state) => ({
+  currentUser: selectCurrentUser(state)
 })
 
 const mapDispatchToProps = dispatch => ({
